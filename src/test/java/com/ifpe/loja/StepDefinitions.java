@@ -1,11 +1,13 @@
 package com.ifpe.loja;
 
+import io.cucumber.java.Before;
+import io.cucumber.java.pt.Dado;
+import io.cucumber.java.pt.Entao;
+import io.cucumber.java.pt.Quando;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.cucumber.java.en.*;
-import io.cucumber.java.Before;
-
-public class CalculaFreteTest {
+public class StepDefinitions {
 
     private boolean isCidadeSede;
     private boolean isMesmoEstadoSede;
@@ -15,36 +17,40 @@ public class CalculaFreteTest {
 
     @Before
     public void setUp() {
+        this.isCidadeSede = false;
+        this.isMesmoEstadoSede = false;
+        this    .valorDaCompra = 0;
+        this.resultado = false;
         this.exception = null;
     }
 
-    @Given("a cidade sede")
-    public void aCidadeSede() {
+    @Dado("a cidade sede da loja")
+    public void aCidadeSedeDaLoja() {
         this.isCidadeSede = true;
     }
 
-    @Given("a não cidade sede")
-    public void aNaoCidadeSede() {
+    @Dado("uma cidade que não seja a sede da loja")
+    public void umaCidadeQueNaoSejaASedeDaLoja() {
         this.isCidadeSede = false;
     }
 
-    @Given("a mesma estado sede")
-    public void aMesmoEstadoSede() {
+    @Dado("o mesmo estado da sede")
+    public void oMesmoEstadoDaSede() {
         this.isMesmoEstadoSede = true;
     }
 
-    @Given("a diferente estado sede")
-    public void aDiferenteEstadoSede() {
+    @Dado("um estado diferente da sede")
+    public void umEstadoDiferenteDaSede() {
         this.isMesmoEstadoSede = false;
     }
 
-    @Given("o valor da compra é {double}")
-    public void oValorDaCompraEDouble(double valor) {
+    @Dado("o valor da compra for {double}")
+    public void oValorDaCompraFor(double valor) {
         this.valorDaCompra = valor;
     }
 
-    @When("calcular frete")
-    public void calcularFrete() {
+    @Quando("for calculado o frete")
+    public void forCalculadoOFrete() {
         try {
             this.resultado = CalculaFrete.devePagarFrete(this.isCidadeSede, this.isMesmoEstadoSede, this.valorDaCompra);
         } catch (Exception e) {
@@ -52,12 +58,17 @@ public class CalculaFreteTest {
         }
     }
 
-    @Then("o resultado deve ser {boolean}")
-    public void oResultadoDeveSer(boolean expectedResult) {
-        assertEquals(expectedResult, this.resultado);
+    @Entao("não deve pagar frete")
+    public void naoDevePagarFrete() {
+        assertFalse(this.resultado);
     }
 
-    @Then("uma exceção deve ser lançada com a mensagem {string}")
+    @Entao("deve pagar frete")
+    public void devePagarFrete() {
+        assertTrue(this.resultado);
+    }
+
+    @Entao("uma exceção deve ser lançada com a mensagem {string}")
     public void umaExcecaoDeveSerLancadaComAMensagem(String mensagem) {
         assertNotNull(this.exception);
         assertEquals(mensagem, this.exception.getMessage());

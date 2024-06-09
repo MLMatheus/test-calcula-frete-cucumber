@@ -1,3 +1,5 @@
+package com.ifpe.loja;
+
 public class CalculaFrete {
 
     public static boolean devePagarFrete(boolean isCidadeSede, boolean isMesmoEstadoSede, double valorDaCompra) throws Exception {
